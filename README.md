@@ -15,4 +15,4 @@ This is by far the simplest way to get up and runnign quickly. MiniGeneos provid
 ### Try in your Kubernetes or Open Shift environment:
 1. See [Installation in an Orchestrated Environment](https://docs.itrsgroup.com/docs/geneos/current/Netprobe/orchestrated-environments/install/install-orchestrated.htm) for how to install Netprobe and Collection Agent in Kubernetes or Open Shift environment.
 2. Apply the example "kubernetes_mapping.xml" Gateway include file to your Gateway.
-3. 
+3. You should see Kubernetes metrics in your Active Console.
