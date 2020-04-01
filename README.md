@@ -10,7 +10,7 @@ This repository contains examples of how to setup the new Dynamic Entities Mappi
 This is by far the simplest way to get up and runnign quickly. MiniGeneos provides averything you need in a docker container that you can run in your desktop / laptop. An example python application is used to demonstrate how to instrument an application to send metrics to Geneos and dynamically create entities as applications are deployed. MiniGeneos uses the "basic_mapping.xml" mapping configuration.
 
 1. See [MiniGeneos](https://docs.itrsgroup.com/docs/geneos/current/MiniGeneos/MiniGeneos.html) for how to install
-2. [Run an example](https://docs.itrsgroup.com/docs/geneos/current/Netprobe/orchestrated-environments/prerequisites/deploy-strategy.htm#Run_an_example_..159) to understand the mapping and Dynamic Entities functionality
+2. [Run an example](https://docs.itrsgroup.com/docs/geneos/current/Netprobe/orchestrated-environments/prerequisites/deploy-strategy.htm#Run_an_example_..158) to understand the mapping and Dynamic Entities functionality
 
 ### Try in your Kubernetes or Open Shift environment:
 1. See [Installation in an Orchestrated Environment](https://docs.itrsgroup.com/docs/geneos/current/Netprobe/orchestrated-environments/install/install-orchestrated.htm) for how to install Netprobe and Collection Agent in Kubernetes or Open Shift environment.
