@@ -603,6 +603,60 @@
             </sampler>
         </samplerGroup>
     </samplers>
+    <commands>
+        <command name="ViewContainerLog">
+            <targets>
+                <target>/geneos/gateway/directory/probe/managedEntity/sampler[(@name=&quot;Kube&quot;)]/dataview[(@name=&quot;container&quot;)]/rows/row/cell</target>
+            </targets>
+            <userCommand>
+                <type>script</type>
+                <runLocation>client</runLocation>
+                <args>
+                    <arg>
+                        <static>/usr/local/bin/kubectl -n   </static>
+                    </arg>
+                    <arg>
+                        <xpath>ancestor::managedEntity/attributes/attribute[@name=&quot;Namespace&quot;]/@value</xpath>
+                    </arg>
+                    <arg>
+                        <static>logs</static>
+                    </arg>
+                    <arg>
+                        <xpath>ancestor::managedEntity/@name</xpath>
+                    </arg>
+                    <arg>
+                        <xpath>@rowName</xpath>
+                    </arg>
+                    <arg>
+                        <static>--tail=500</static>
+                    </arg>
+                </args>
+            </userCommand>
+        </command>
+        <command name="Show Pod Logs">
+            <targets>
+                <target>/geneos/gateway/directory/probe/managedEntity</target>
+            </targets>
+            <userCommand>
+                <type>script</type>
+                <runLocation>client</runLocation>
+                <args>
+                    <arg>
+                        <concatenate>false</concatenate>
+                        <static>/usr/local/bin/kubectl  -n geneos logs</static>
+                    </arg>
+                    <arg>
+                        <concatenate>false</concatenate>
+                        <xpath>@name</xpath>
+                    </arg>
+                    <arg>
+                        <concatenate>false</concatenate>
+                        <static>--all-containers=true --tail=300</static>
+                    </arg>
+                </args>
+            </userCommand>
+        </command>
+    </commands>
     <rules>
         <rule name="Sampling Status">
             <targets>
