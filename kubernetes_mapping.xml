@@ -625,7 +625,7 @@
                         <xpath>ancestor::managedEntity/@name</xpath>
                     </arg>
                     <arg>
-                        <xpath>@rowName</xpath>
+                        <xpath>@rowname</xpath>
                     </arg>
                     <arg>
                         <static>--tail=500</static>
