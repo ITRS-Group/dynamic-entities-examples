@@ -64,6 +64,11 @@
                         <dimension>volume_name</dimension>
                     </directoryMapping>
                 </rowMapping>
+                <streamMapping>
+                    <directoryMapping>
+                        <dimension>container_name</dimension>
+                    </directoryMapping>
+                </streamMapping>
                 <attributeMappings>
                     <attributeMapping>
                         <name>Namespace</name>
@@ -604,7 +609,7 @@
         </samplerGroup>
     </samplers>
     <commands>
-        <command name="ViewContainerLog">
+        <command name="Show Container Log">
             <targets>
                 <target>/geneos/gateway/directory/probe/managedEntity/sampler[(@name=&quot;Kube&quot;)]/dataview[(@name=&quot;container&quot;)]/rows/row/cell</target>
             </targets>
@@ -625,7 +630,7 @@
                         <xpath>ancestor::managedEntity/@name</xpath>
                     </arg>
                     <arg>
-                        <xpath>@rowname</xpath>
+                        <xpath>ancestor::row/@name</xpath>
                     </arg>
                     <arg>
                         <static>--tail=500</static>
@@ -643,7 +648,13 @@
                 <args>
                     <arg>
                         <concatenate>false</concatenate>
-                        <static>/usr/local/bin/kubectl  -n geneos logs</static>
+                        <static>/usr/local/bin/kubectl -n </static>
+                    </arg>
+                    <arg>
+                        <xpath>./attributes/attribute[@name=&quot;Namespace&quot;]/@value</xpath>
+                    </arg>
+                    <arg>
+                        <static>logs</static>
                     </arg>
                     <arg>
                         <concatenate>false</concatenate>
@@ -828,6 +839,78 @@
                 </block>
             </rule>
         </ruleGroup>
+        <ruleGroup name="Mappings">
+            <rule name="Invalid Metric Count">
+                <targets>
+                    <target>/geneos/gateway/directory/probe/managedEntity/sampler[(@name=&quot;Health&quot;)][(@type=&quot;Health&quot;)]/dataview[(@name=&quot;InvalidMetrics&quot;)]/headlines/cell[(@name=&quot;numberDetected&quot;)]</target>
+                </targets>
+                <priority>1</priority>
+                <block>
+                    <if>
+                        <gt>
+                            <dataItem>
+                                <property>@value</property>
+                            </dataItem>
+                            <integer>10</integer>
+                        </gt>
+                        <transaction>
+                            <update>
+                                <property>state/@severity</property>
+                                <severity>critical</severity>
+                            </update>
+                        </transaction>
+                        <if>
+                            <gt>
+                                <dataItem>
+                                    <property>@value</property>
+                                </dataItem>
+                                <integer>0</integer>
+                            </gt>
+                            <transaction>
+                                <update>
+                                    <property>state/@severity</property>
+                                    <severity>warning</severity>
+                                </update>
+                            </transaction>
+                            <transaction>
+                                <update>
+                                    <property>state/@severity</property>
+                                    <severity>ok</severity>
+                                </update>
+                            </transaction>
+                        </if>
+                    </if>
+                </block>
+            </rule>
+            <rule name="Entity Issues">
+                <targets>
+                    <target>/geneos/gateway/directory/probe/managedEntity/sampler[(@name=&quot;Health&quot;)][(@type=&quot;Health&quot;)]/dataview[(@name=&quot;Entities&quot;)]/rows/row/cell[(@column=&quot;state&quot;)]</target>
+                </targets>
+                <priority>1</priority>
+                <block>
+                    <if>
+                        <equal>
+                            <dataItem>
+                                <property>@value</property>
+                            </dataItem>
+                            <string>ACCEPTED</string>
+                        </equal>
+                        <transaction>
+                            <update>
+                                <property>state/@severity</property>
+                                <severity>ok</severity>
+                            </update>
+                        </transaction>
+                        <transaction>
+                            <update>
+                                <property>state/@severity</property>
+                                <severity>warning</severity>
+                            </update>
+                        </transaction>
+                    </if>
+                </block>
+            </rule>
+        </ruleGroup>
     </rules>
     <operatingEnvironment>
         <gatewayName></gatewayName>
@@ -853,6 +936,9 @@
             <macro>
                 <gatewayName></gatewayName>
             </macro>
+        </var>
+        <var name="Kubectl">
+            <string>/usr/local/bin/kubectl </string>
         </var>
     </operatingEnvironment>
 </gateway>
