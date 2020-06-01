@@ -10,12 +10,12 @@ from itrsstatsd.api import Api
 from itrsstatsd.units import Unit
 
 os.environ['STATSD_SERVER'] = "localhost"
-os.environ['STATSD_PORT'] = "7780"
+os.environ['STATSD_PORT'] = "8125"
 
 def main():
     setup_signals()
     logger = get_logger("mypyapp")
-    statsd = build_statsd(protocol='tcp')
+    statsd = build_statsd(protocol='udp')
     statsd.default_dimensions(app_name="example_app", Location="New York", component="Middleware")
     while True:
         emit_metric_or_log(statsd, logger)
